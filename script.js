@@ -1,54 +1,58 @@
 "use strict";
-let secretNumber = Math.trunc(Math.random() * 20) + 1;
+let secretNumber = getSecretNumber();
 let currentScore = 20;
-let highScore = 0;
-document.querySelector(".check").addEventListener("click", () => {
-  const guess = Number(document.querySelector(".guess").value);
+let currentHighScore = 0;
+
+const messageEl = document.querySelector(".message");
+const numberEl = document.querySelector(".number");
+const bodyEl = document.querySelector("body");
+const highScoreEl = document.querySelector(".highscore");
+const scoreEl = document.querySelector(".score");
+const checkEl = document.querySelector(".check");
+const guessEl = document.querySelector(".guess");
+const againEl = document.querySelector(".again");
+
+const displayMessage = (messageContent) => {
+  messageEl.textContent = messageContent;
+};
+function getSecretNumber() {
+  return Math.trunc(Math.random() * 20) + 1;
+}
+
+checkEl.addEventListener("click", () => {
+  const guess = Number(guessEl.value);
   if (!guess) {
-    document.querySelector(".message").textContent = "‼️ No number entered";
+    displayMessage("‼️ No number entered");
   } else if (guess === secretNumber) {
-    document.querySelector(".number").textContent = secretNumber;
-    document.querySelector(".message").textContent = "🎉 You are correct.";
-    document.querySelector(".number").textContent = secretNumber;
-    document.querySelector("body").style.backgroundColor = "#60b347";
-    document.querySelector(".number").style.width = "30rem";
-    if (highScore < currentScore) {
-      highScore = currentScore;
-      document.querySelector(".highscore").textContent = highScore;
+    numberEl.textContent = secretNumber;
+    numberEl.style.width = "30rem";
+    displayMessage("🎉 You are correct.");
+    bodyEl.style.backgroundColor = "#60b347";
+    if (currentHighScore < currentScore) {
+      currentHighScore = currentScore;
+      highScoreEl.textContent = currentHighScore;
     }
-  } else if (guess < secretNumber) {
+  } else if (guess !== secretNumber) {
     if (currentScore > 1) {
-      document.querySelector(".message").textContent = "📉 Too Low";
+      displayMessage(guess > secretNumber ? "📈 Too High" : "📉 Too Low");
       currentScore--;
-      document.querySelector(".score").textContent = currentScore;
+      scoreEl.textContent = currentScore;
     } else {
-      document.querySelector(".message").textContent = "☹️ You Lose";
+      displayMessage("☹️ You Lose");
       currentScore--;
-      document.querySelector("body").style.backgroundColor = "red";
-      document.querySelector(".check").disabled = "true";
-      document.querySelector(".score").textContent = currentScore;
-    }
-  } else if (guess > secretNumber) {
-    if (currentScore > 1) {
-      document.querySelector(".message").textContent = "📈 Too High";
-      currentScore--;
-      document.querySelector(".score").textContent = currentScore;
-    } else {
-      document.querySelector(".message").textContent = "☹️ You Lose";
-      currentScore--;
-      document.querySelector("body").style.backgroundColor = "red";
-      document.querySelector(".check").disabled = "true";
-      document.querySelector(".score").textContent = currentScore;
+      bodyEl.style.backgroundColor = "red";
+      checkEl.disabled = "true";
+      scoreEl.textContent = currentScore;
     }
   }
 });
-document.querySelector(".again").addEventListener("click", () => {
+againEl.addEventListener("click", () => {
   currentScore = 20;
-  secretNumber = Math.trunc(Math.random() * 20) + 1;
-  document.querySelector(".number").style.width = "15rem";
-  document.querySelector(".number").textContent = "?";
-  document.querySelector(".message").textContent = "Start guessing...";
-  document.querySelector(".guess").value = "";
-  document.querySelector(".score").textContent = currentScore;
-  document.querySelector("body").style.backgroundColor = "#222";
+  secretNumber = getSecretNumber();
+  numberEl.style.width = "15rem";
+  numberEl.textContent = "?";
+  displayMessage("Start guessing...");
+  guessEl.value = "";
+  scoreEl.textContent = currentScore;
+  bodyEl.style.backgroundColor = "#222";
 });
