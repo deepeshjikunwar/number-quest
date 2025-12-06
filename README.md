@@ -5,6 +5,7 @@ A small browser game where the player guesses a secret number between 1 and 20.
 ## Preview
 
 Open [index.html](index.html) in your browser to play.
+![Game screenshot](assets/game-screenshot.png)
 
 ## Files
 
